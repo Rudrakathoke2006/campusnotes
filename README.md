@@ -20,21 +20,7 @@ Deploy immediately with a free live HTTPS URL and zero AWS costs:
 3. Render automatically detects `render.yaml` and deploys using `gunicorn wsgi:app`.
 4. Your live app is accessible at `https://campusnotes-xxxx.onrender.com` in ~2 minutes!
 
----
-
-### Option 2: Run with Docker Anywhere
-```bash
-# Build the image
-docker build -t campusnotes .
-
-# Run the container locally or on any cloud server
-docker run -p 8000:8000 campusnotes
-```
-Open [http://localhost:8000](http://localhost:8000) in your browser.
-
----
-
-### Option 3: Full Production Deployment on AWS
+### Option 2: Full Production Deployment on AWS
 Designed for AWS Cloud Architecture with:
 - **Application Load Balancer (ALB)** with Auto Scaling across multi-AZ
 - **Amazon Aurora MySQL** managed database with Secrets Manager
@@ -140,7 +126,6 @@ tests/test_app.py::test_health_check_endpoint PASSED                     [100%]
 ├── aws/                      # AWS automation scripts (ALB, ASG, S3, RDS, EFS, Lambda)
 ├── stages/                   # Incremental lab stages (Stage 1 to Stage 3)
 ├── tests/                    # Pytest test suite (19 test cases)
-├── Dockerfile                # Multi-stage production container
 ├── Procfile                  # Gunicorn web process definition
 ├── render.yaml               # Render Cloud Blueprint
 ├── wsgi.py                   # Production WSGI entry point

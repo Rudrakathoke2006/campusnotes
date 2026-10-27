@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="dashboard-container">
+
+  <!-- Faculty Header & Stats -->
+  <div class="welcome-header">
+    <div class="welcome-text">
+      <div class="badge-faculty-tag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <span>Faculty Review & Accreditation Portal</span>
+      </div>
+      <h1 class="page-title">Certificate Verification Queue</h1>
+      <p class="page-subtitle">Inspect student submissions, authenticate credentials, and approve activity credits.</p>
+    </div>
+    <div class="faculty-switch-student">
+      <a href="/" class="btn-secondary-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        <span>Student View</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Total Student Submissions</span>
+        <span class="stat-value">{{ stats.total }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card highlight-card">
+      <div class="stat-icon-wrapper stat-amber">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Pending Faculty Action</span>
+        <span class="stat-value text-amber">{{ stats.pending }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Approved & Accredited</span>
+        <span class="stat-value text-green">{{ stats.approved }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-rose">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Rejected / Returned</span>
+        <span class="stat-value text-rose">{{ stats.rejected }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter & Search Controls Card -->
+  <section class="card filter-card">
+    <form method="get" action="/faculty" class="faculty-filter-form">
+      <div class="filter-row">
+        <!-- Search Input -->
+        <div class="search-input-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" name="q" value="{{ search_query }}" placeholder="Search by student name, roll number, certificate title..." class="search-field">
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="filter-select-box">
+          <select name="category" class="filter-dropdown" onchange="this.form.submit()">
+            <option value="all" {% if current_category == 'all' %}selected{% endif %}>All Categories</option>
+            <option value="Industry Certification" {% if current_category == 'Industry Certification' %}selected{% endif %}>Industry Certification</option>
+            <option value="Online Course" {% if current_category == 'Online Course' %}selected{% endif %}>Online Course</option>
+            <option value="Internship" {% if current_category == 'Internship' %}selected{% endif %}>Internship</option>
+            <option value="Hackathon & Competition" {% if current_category == 'Hackathon & Competition' %}selected{% endif %}>Hackathon</option>
+            <option value="Workshop & Seminar" {% if current_category == 'Workshop & Seminar' %}selected{% endif %}>Workshop</option>
+            <option value="Academic Honors" {% if current_category == 'Academic Honors' %}selected{% endif %}>Academic Honors</option>
+          </select>
+        </div>
+
+        <!-- Filter Submit Button -->
+        <button type="submit" class="btn btn-secondary-sm">
+          <span>Apply Filter</span>
+        </button>
+
+        {% if search_query or current_category != 'all' or current_status != 'all' %}
+          <a href="/faculty" class="btn-clear-filter">Reset Filters</a>
+        {% endif %}
+      </div>
+
+      <!-- Quick Status Filter Pills -->
+      <div class="status-pills-bar">
+        <span class="pills-label">Status Filter:</span>
+        <a href="/faculty?status=all&category={{ current_category }}&q={{ search_query }}" 
+           class="status-tab {% if current_status == 'all' %}active{% endif %}">
+           All ({{ stats.total }})
+        </a>
+        <a href="/faculty?status=pending&category={{ current_category }}&q={{ search_query }}" 
+           class="status-tab tab-pending {% if current_status == 'pending' %}active{% endif %}">
+           Pending Review ({{ stats.pending }})
+        </a>
+        <a href="/faculty?status=approved&category={{ current_category }}&q={{ search_query }}" 
+           class="status-tab tab-approved {% if current_status == 'approved' %}active{% endif %}">
+           Approved ({{ stats.approved }})
+        </a>
+        <a href="/faculty?status=rejected&category={{ current_category }}&q={{ search_query }}" 
+           class="status-tab tab-rejected {% if current_status == 'rejected' %}active{% endif %}">
+           Rejected ({{ stats.rejected }})
+        </a>
+      </div>
+    </form>
+  </section>
+
+  <!-- Certificates Review Table -->
+  <section class="card notes-card">
+    <div class="card-header header-with-count">
+      <div>
+        <h2 class="card-title">Submitted Student Certificates</h2>
+        <p class="card-subtitle">Review documents, verify authenticity, and approve/reject with remarks</p>
+      </div>
+      <span class="count-badge">{{ certs|length }} Matching Submissions</span>
+    </div>
+
+    {% if certs %}
+      <div class="table-responsive">
+        <table class="notes-table faculty-table">
+          <thead>
+            <tr>
+              <th>Student Details</th>
+              <th>Certificate & Org</th>
+              <th>Category & Date</th>
+              <th>Document</th>
+              <th>Status</th>
+              <th class="text-right">Faculty Decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in certs %}
+              <tr class="note-row cert-row-{{ c.status|lower }}">
+                <!-- Student Details -->
+                <td class="cell-student">
+                  <div class="student-profile">
+                    <span class="student-avatar">{{ c.student_name[0]|upper }}</span>
+                    <div>
+                      <div class="student-name">{{ c.student_name }}</div>
+                      <div class="student-roll">Roll No: <strong>{{ c.roll_number or 'N/A' }}</strong></div>
+                      <div class="student-email">{{ c.student_email }}</div>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Certificate Title & Org -->
+                <td class="cell-title">
+                  <div class="doc-title-main">{{ c.title }}</div>
+                  <div class="doc-org-sub">🏛️ {{ c.issuing_org }}</div>
+                  {% if c.credential_url %}
+                    <a href="{{ c.credential_url }}" target="_blank" rel="noopener" class="link-verify-sub">
+                      External Credential Link ↗
+                    </a>
+                  {% endif %}
+                </td>
+
+                <!-- Category & Date -->
+                <td>
+                  <span class="subject-badge">{{ c.category }}</span>
+                  <div class="date-issued-text">Issued: {{ c.issue_date }}</div>
+                </td>
+
+                <!-- Document Preview -->
+                <td class="cell-doc-view">
+                  <a href="/view/{{ c.id }}" target="_blank" class="btn-inspect-doc" title="Open certificate in new tab">
+                    <span class="file-badge badge-{{ c.file_type|lower }}">{{ c.file_type|upper }}</span>
+                    <span>Inspect</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  </a>
+                </td>
+
+                <!-- Status -->
+                <td>
+                  {% if c.status == 'Approved' %}
+                    <span class="status-pill status-approved">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      <span>Approved</span>
+                    </span>
+                    {% if c.verified_at %}
+                      <div class="verified-meta">{{ c.verified_at }}</div>
+                    {% endif %}
+                  {% elif c.status == 'Rejected' %}
+                    <span class="status-pill status-rejected">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      <span>Rejected</span>
+                    </span>
+                  {% else %}
+                    <span class="status-pill status-pending pulse-pill">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      <span>Needs Review</span>
+                    </span>
+                  {% endif %}
+
+                  {% if c.faculty_remarks %}
+                    <div class="faculty-note-preview" title="{{ c.faculty_remarks }}">
+                      💬 {{ c.faculty_remarks[:45] }}{% if c.faculty_remarks|length > 45 %}...{% endif %}
+                    </div>
+                  {% endif %}
+                </td>
+
+                <!-- Faculty Actions -->
+                <td class="cell-decision text-right">
+                  <div class="decision-panel">
+                    <button class="btn-action-decision btn-toggle-review" onclick="toggleReviewBox('{{ c.id }}')">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      <span>{% if c.status == 'Pending' %}Review{% else %}Edit Review{% endif %}</span>
+                    </button>
+                  </div>
+
+                  <!-- Expandable Faculty Review Drawer -->
+                  <div id="review-box-{{ c.id }}" class="review-drawer" style="display: none;">
+                    <form method="post" action="/verify/{{ c.id }}" class="faculty-decision-form">
+                      <div class="drawer-header">
+                        <strong>Verify {{ c.student_name }}'s Certificate</strong>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label-sm" for="remarks-{{ c.id }}">Faculty Feedback / Remarks</label>
+                        <input id="remarks-{{ c.id }}" name="remarks" class="input-field-sm" 
+                               value="{{ c.faculty_remarks or '' }}" 
+                               placeholder="e.g. Approved. Awarded 10 activity points / Resubmit with valid signature">
+                      </div>
+
+                      <div class="drawer-actions">
+                        <button type="submit" name="action" value="approve" class="btn btn-approve-sm">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          <span>Approve</span>
+                        </button>
+
+                        <button type="submit" name="action" value="reject" class="btn btn-reject-sm">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                          <span>Reject</span>
+                        </button>
+
+                        <button type="button" class="btn btn-cancel-sm" onclick="toggleReviewBox('{{ c.id }}')">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3 class="empty-title">No submissions match criteria</h3>
+        <p class="empty-desc">There are no student certificates under this filter or search query.</p>
+        <a href="/faculty" class="btn-primary-sm mt-3">Reset Filters</a>
+      </div>
+    {% endif %}
+  </section>
+</div>
+
+<script>
+function toggleReviewBox(id) {
+  var el = document.getElementById('review-box-' + id);
+  if (el.style.display === 'none' || el.style.display === '') {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+</script>
+{% endblock %}

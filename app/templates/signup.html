@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="auth-container">
+  <div class="auth-card auth-card-wide">
+    <div class="auth-header">
+      <div class="auth-icon-badge">✨</div>
+      <h2 class="auth-title">Create CampusCert Account</h2>
+      <p class="auth-subtitle">Join the university certificate accreditation portal</p>
+    </div>
+
+    <form class="auth-form" method="post">
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="form-label" for="signup-name">Full Name *</label>
+          <input id="signup-name" class="input-field" name="full_name" placeholder="e.g. Alex Chen or Dr. Sharma" required>
+        </div>
+
+        <div class="form-group flex-1">
+          <label class="form-label" for="signup-email">Institutional Email *</label>
+          <input id="signup-email" class="input-field" name="email" type="email" placeholder="name@campus.edu" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="form-label" for="signup-role">I am a... *</label>
+          <select id="signup-role" name="role" class="input-field" required onchange="updateRoleField(this.value)">
+            <option value="student" selected>🎓 Student (Uploading Certificates)</option>
+            <option value="faculty">👨‍🏫 Faculty Member (Reviewing & Verifying)</option>
+          </select>
+        </div>
+
+        <div class="form-group flex-1">
+          <label class="form-label" id="label-roll-id" for="signup-roll">Roll / Registration Number *</label>
+          <input id="signup-roll" class="input-field" name="roll_number" placeholder="e.g. 21CS042" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="form-label" for="signup-dept">Academic Department</label>
+          <input id="signup-dept" class="input-field" name="department" placeholder="e.g. Computer Science & Engineering">
+        </div>
+
+        <div class="form-group flex-1">
+          <label class="form-label" for="signup-password">Password *</label>
+          <input id="signup-password" class="input-field" name="password" type="password" placeholder="••••••••" required autocomplete="new-password">
+        </div>
+      </div>
+
+      <div class="password-requirements">
+        <span class="req-title">Password requirements:</span>
+        <span class="req-desc">At least 8 characters with numbers, lowercase, and uppercase letters.</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="btn-signup-submit">
+        <span>Create Account</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a href="/login" class="auth-switch-link">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateRoleField(val) {
+  var lbl = document.getElementById('label-roll-id');
+  var inp = document.getElementById('signup-roll');
+  if (val === 'faculty') {
+    lbl.innerText = 'Faculty / Employee ID *';
+    inp.placeholder = 'e.g. FAC-1092';
+  } else {
+    lbl.innerText = 'Roll / Registration Number *';
+    inp.placeholder = 'e.g. 21CS042';
+  }
+}
+</script>
+{% endblock %}

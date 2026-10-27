@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon-badge">🎓</div>
+      <h2 class="auth-title">Welcome to CampusCert</h2>
+      <p class="auth-subtitle">Sign in to upload certificates or verify student credentials</p>
+    </div>
+
+    <form class="auth-form" method="post">
+      <div class="form-group">
+        <label class="form-label" for="login-email">Campus Email Address</label>
+        <input id="login-email" class="input-field" name="email" type="email" placeholder="student@campus.edu or faculty@campus.edu" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">Password</label>
+        <input id="login-password" class="input-field" name="password" type="password" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
+        <span>Sign In</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </form>
+
+    <!-- Quick Demo Access Box for Evaluators/Faculty -->
+    <div class="demo-accounts-box">
+      <span class="demo-box-title">⚡ Quick Test Accounts (Pre-configured):</span>
+      <div class="demo-pills-row">
+        <button type="button" class="btn-demo-pill" onclick="fillCreds('student@campus.edu', 'Campus@123')">
+          <span>🎓 Fill Student Demo</span>
+        </button>
+        <button type="button" class="btn-demo-pill" onclick="fillCreds('faculty@campus.edu', 'Campus@123')">
+          <span>👨‍🏫 Fill Faculty Demo</span>
+        </button>
+      </div>
+      <span class="demo-hint">Default password: <code>Campus@123</code></span>
+    </div>
+
+    <div class="auth-footer">
+      <p>New to CampusCert? <a href="/signup" class="auth-switch-link">Create a new account</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillCreds(email, pass) {
+  document.getElementById('login-email').value = email;
+  document.getElementById('login-password').value = pass;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang='en'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>CampusNotes</title><link rel='stylesheet' href='/static/style.css'></head>
+<body>
+<header><a href='/'><b>CampusNotes</b></a>
+{% if session.user %}<span>{{ session.user }} |
+<a href='/logout'>Log out</a></span>{% endif %}</header>
+{% if announcement %}<p class='banner'>{{ announcement }}</p>{% endif %}
+<main>
+{% for m in get_flashed_messages() %}<p class='msg'>{{ m }}</p>{% endfor %}
+{% block body %}{% endblock %}
+</main>
+<footer>Served by {{ instance }} in {{ az }}</footer>
+</body></html>

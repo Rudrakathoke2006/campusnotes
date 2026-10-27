@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="dashboard-grid">
+  <!-- Upload Section Card -->
+  <section class="card upload-card">
+    <div class="card-header">
+      <div class="card-header-icon">📤</div>
+      <div>
+        <h2 class="card-title">Share a Study Note</h2>
+        <p class="card-subtitle">Upload your lecture notes, summaries, or assignment materials (PDF format)</p>
+      </div>
+    </div>
+    <form class="upload-form" method='post' action='/upload' enctype='multipart/form-data'>
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="form-label" for="upload-title">Note Title</label>
+          <input id="upload-title" name='title' class="input-field" placeholder='e.g. Distributed Systems Lecture 4' required>
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label" for="upload-subject">Subject / Course</label>
+          <input id="upload-subject" name='subject' class="input-field" placeholder='e.g. CS401 - Cloud Computing' required>
+        </div>
+      </div>
+      <div class="form-row form-row-bottom">
+        <div class="form-group flex-1">
+          <label class="form-label" for="upload-file">PDF Document</label>
+          <div class="file-input-wrapper">
+            <input id="upload-file" name='file' type='file' accept='application/pdf' class="file-input" required>
+          </div>
+        </div>
+        <div class="form-group form-action-btn">
+          <button type="submit" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span>Upload PDF</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Notes Repository Section -->
+  <section class="card notes-card">
+    <div class="card-header header-with-count">
+      <div>
+        <h2 class="card-title">Shared Notes Repository</h2>
+        <p class="card-subtitle">Browse and download peer-contributed study materials</p>
+      </div>
+      <span class="count-badge">{{ notes|length if notes else 0 }} available</span>
+    </div>
+
+    {% if notes %}
+      <div class="table-responsive">
+        <table class="notes-table">
+          <thead>
+            <tr>
+              <th>Document Title</th>
+              <th>Subject</th>
+              <th>Shared By</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for n in notes %}
+              <tr class="note-row">
+                <td class="cell-title">
+                  <div class="doc-item">
+                    <span class="pdf-icon">PDF</span>
+                    <span class="doc-name">{{ n.title }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="subject-badge">{{ n.subject }}</span>
+                </td>
+                <td class="cell-owner">
+                  <span class="owner-pill">
+                    {{ n.owner }}
+                    {% if n.owner == session.user %}
+                      <span class="badge-you">You</span>
+                    {% endif %}
+                  </span>
+                </td>
+                <td class="cell-actions text-right">
+                  <div class="action-group">
+                    <a class="btn-action btn-download" href='/download/{{ n.id }}' title="Download Document">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </a>
+                    {% if n.owner == session.user %}
+                      <form class='inline-replace-form' method='post' action='/replace/{{ n.id }}' enctype='multipart/form-data'>
+                        <label class="btn-action btn-replace" title="Replace with updated PDF">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                          <span>Replace</span>
+                          <input name='file' type='file' accept='application/pdf' onchange="this.form.submit()" style="display:none" required>
+                        </label>
+                      </form>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📁</div>
+        <h3 class="empty-title">No notes uploaded yet</h3>
+        <p class="empty-desc">Be the first to share knowledge with your classmates by uploading a PDF note above!</p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+

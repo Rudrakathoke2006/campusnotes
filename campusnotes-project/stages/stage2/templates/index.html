@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% block body %}
+<h2>Share a note</h2>
+<form method='post' action='/upload' enctype='multipart/form-data'>
+<input name='title' placeholder='Title' required>
+<input name='subject' placeholder='Subject' required>
+<input name='file' type='file' accept='application/pdf' required>
+<button>Upload PDF</button></form>
+<h2>All notes</h2>
+{% if notes %}
+<table><tr><th>Title</th><th>Subject</th><th>Shared by</th><th></th></tr>
+{% for n in notes %}<tr><td>{{ n.title }}</td><td>{{ n.subject }}</td><td>{{ n.owner }}</td>
+<td><a href='/download/{{ n.id }}'>Download</a>
+{% if n.owner == session.user %}
+<form class='inline' method='post' action='/replace/{{ n.id }}' enctype='multipart/form-data'>
+<input name='file' type='file' accept='application/pdf' required>
+<button>Replace file</button></form>
+{% endif %}</td></tr>{% endfor %}</table>
+{% else %}<p>No notes yet. Upload the first one.</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.6, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ACER\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\ACER\Desktop\cloud computing LA\campusnotes-project1\campusnotes-project
+plugins: anyio-4.14.2
+collecting ... collected 10 items
+
+tests/test_app.py::test_health_check PASSED                              [ 10%]
+tests/test_app.py::test_student_login_success PASSED                     [ 20%]
+tests/test_app.py::test_login_invalid_credentials PASSED                 [ 30%]
+tests/test_app.py::test_unauthenticated_access_redirects PASSED          [ 40%]
+tests/test_app.py::test_rbac_student_cannot_verify_certificate PASSED    [ 50%]
+tests/test_app.py::test_student_cannot_view_other_student_certificate PASSED [ 60%]
+tests/test_app.py::test_upload_invalid_file_extension PASSED             [ 70%]
+tests/test_app.py::test_faculty_verify_certificate_approve PASSED        [ 80%]
+tests/test_app.py::test_student_can_delete_pending_certificate PASSED    [ 90%]
+tests/test_app.py::test_approved_certificate_cannot_be_deleted_by_student PASSED [100%]
+
+============================= 10 passed in 7.67s ==============================

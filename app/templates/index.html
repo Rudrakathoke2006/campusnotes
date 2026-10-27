@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="dashboard-container">
+
+  <!-- Welcome & KPI Summary Cards -->
+  <div class="welcome-header">
+    <div class="welcome-text">
+      <h1 class="page-title">Student Certificate Dashboard</h1>
+      <p class="page-subtitle">Upload your verified credentials, certifications, and achievements for faculty accreditation.</p>
+    </div>
+    <div class="faculty-quick-link">
+      <a href="/faculty" class="btn-faculty-hub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+        <span>Go to Faculty Verification Hub</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Total Uploaded</span>
+        <span class="stat-value">{{ stats.total }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Verified & Approved</span>
+        <span class="stat-value text-green">{{ stats.approved }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-amber">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Pending Faculty Review</span>
+        <span class="stat-value text-amber">{{ stats.pending }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper stat-rose">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">Needs Revision</span>
+        <span class="stat-value text-rose">{{ stats.rejected }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Certificate Upload Form Card -->
+    <section class="card upload-card">
+      <div class="card-header">
+        <div class="card-header-icon cert-icon">📜</div>
+        <div>
+          <h2 class="card-title">Upload New Certificate</h2>
+          <p class="card-subtitle">Submit certificates from NPTEL, Coursera, AWS, internships, or hackathons</p>
+        </div>
+      </div>
+
+      <form class="upload-form" method="post" action="/upload" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label class="form-label" for="cert-title">Certificate Title / Course Name *</label>
+            <input id="cert-title" name="title" class="input-field" placeholder="e.g. AWS Certified Cloud Practitioner / Machine Learning" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="cert-category">Category *</label>
+            <select id="cert-category" name="category" class="input-field" required>
+              <option value="Industry Certification">Industry Certification (AWS, Google, etc.)</option>
+              <option value="Online Course">Online Course (Coursera, NPTEL, edX)</option>
+              <option value="Internship">Internship Experience</option>
+              <option value="Hackathon & Competition">Hackathon & Competition</option>
+              <option value="Workshop & Seminar">Workshop & Technical Seminar</option>
+              <option value="Academic Honors">Academic Honors & Project</option>
+              <option value="Extracurricular & Sports">Extracurricular & Sports</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="cert-org">Issuing Organization / Authority *</label>
+            <input id="cert-org" name="issuing_org" class="input-field" placeholder="e.g. Amazon Web Services / Stanford Online" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="cert-date">Issue Date *</label>
+            <input id="cert-date" name="issue_date" type="date" class="input-field" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="cert-name">Student Full Name *</label>
+            <input id="cert-name" name="student_name" class="input-field" value="{{ current_name }}" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="cert-roll">Roll / Registration Number *</label>
+            <input id="cert-roll" name="roll_number" class="input-field" value="{{ session.roll_number }}" placeholder="e.g. 21CS042" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label class="form-label" for="cert-url">Online Verification URL (Optional)</label>
+            <input id="cert-url" name="credential_url" type="url" class="input-field" placeholder="https://www.credly.com/badges/... or verification link">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="cert-file">Certificate File (PDF or Image) *</label>
+            <div class="file-input-wrapper">
+              <input id="cert-file" name="file" type="file" accept=".pdf,.png,.jpg,.jpeg" class="file-input" required>
+            </div>
+            <span class="field-hint">Supports PDF, PNG, JPG (up to 15MB)</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-submit-cert">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span>Upload Certificate for Verification</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- My Submitted Certificates Section -->
+    <section class="card notes-card">
+      <div class="card-header header-with-count">
+        <div>
+          <h2 class="card-title">My Uploaded Certificates</h2>
+          <p class="card-subtitle">Track verification progress, review status, and faculty comments</p>
+        </div>
+        <span class="count-badge">{{ certs|length if certs else 0 }} Submissions</span>
+      </div>
+
+      {% if certs %}
+        <div class="table-responsive">
+          <table class="notes-table">
+            <thead>
+              <tr>
+                <th>Certificate Details</th>
+                <th>Category</th>
+                <th>Issue Date</th>
+                <th>Status</th>
+                <th>Faculty Remarks</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in certs %}
+                <tr class="note-row">
+                  <td class="cell-title">
+                    <div class="doc-item">
+                      <span class="file-badge badge-{{ c.file_type|lower }}">{{ c.file_type|upper }}</span>
+                      <div>
+                        <div class="doc-name">{{ c.title }}</div>
+                        <div class="doc-meta-sub">
+                          <span class="org-name">🏛️ {{ c.issuing_org }}</span>
+                          {% if c.credential_url %}
+                            • <a href="{{ c.credential_url }}" target="_blank" rel="noopener" class="link-verify">Verify Link ↗</a>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="subject-badge">{{ c.category }}</span>
+                  </td>
+                  <td>
+                    <span class="date-text">{{ c.issue_date }}</span>
+                  </td>
+                  <td>
+                    {% if c.status == 'Approved' %}
+                      <span class="status-pill status-approved">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Approved</span>
+                      </span>
+                    {% elif c.status == 'Rejected' %}
+                      <span class="status-pill status-rejected">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <span>Needs Revision</span>
+                      </span>
+                    {% else %}
+                      <span class="status-pill status-pending">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>Pending Review</span>
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td class="cell-remarks">
+                    {% if c.faculty_remarks %}
+                      <div class="remarks-bubble {% if c.status == 'Approved' %}remarks-success{% else %}remarks-warning{% endif %}">
+                        <span class="remarks-quote">“{{ c.faculty_remarks }}”</span>
+                        {% if c.verified_by %}
+                          <span class="remarks-author">— {{ c.verified_by }}</span>
+                        {% endif %}
+                      </div>
+                    {% else %}
+                      <span class="text-muted-italics">Awaiting faculty review</span>
+                    {% endif %}
+                  </td>
+                  <td class="cell-actions text-right">
+                    <div class="action-group">
+                      <a class="btn-action btn-view" href="/view/{{ c.id }}" target="_blank" title="View Certificate Document">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <span>View</span>
+                      </a>
+                      <a class="btn-action btn-download" href="/download/{{ c.id }}" title="Download Certificate">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      </a>
+                      {% if c.status != 'Approved' %}
+                        <form method="post" action="/delete/{{ c.id }}" onsubmit="return confirm('Remove this certificate submission?');" class="inline-form">
+                          <button type="submit" class="btn-action btn-delete" title="Delete Submission">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          </button>
+                        </form>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">📜</div>
+          <h3 class="empty-title">No certificates uploaded yet</h3>
+          <p class="empty-desc">Upload your course credentials, internships, or competitive achievements using the form above to have them accredited by faculty.</p>
+        </div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

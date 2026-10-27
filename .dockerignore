@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv
+campusnotes-project/.venv
+__pycache__
+*.pyc
+.pytest_cache
+campusnotes-project/.pytest_cache
+htmlcov
+.coverage
+app/logs/*.log
+campusnotes-project/app/logs/*.log
+*.db

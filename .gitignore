@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+.venv/
+*/.venv/
+*/*/.venv/
+*/*/*/.venv/
+venv/
+*/venv/
+*/*/venv/
+*/*/*/venv/
+ENV/
+env/
+
+# Testing and Coverage
+.pytest_cache/
+*/.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+
+# Logs & Databases
+*.log
+app/logs/*.log
+campusnotes-project/app/logs/*.log
+*.sqlite
+*.sqlite3
+*.db
+!app/certificates.db.example
+
+# OS / Editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment configs
+.env
+.env.local
+.env.*.local

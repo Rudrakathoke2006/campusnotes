@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block body %}
+<h2>Log in</h2>
+<form method='post'>
+<input name='email' type='email' placeholder='Email' required>
+<input name='password' type='password' placeholder='Password' required>
+<button>Log in</button></form>
+<p>New here? <a href='/signup'>Create an account</a></p>
+{% endblock %}

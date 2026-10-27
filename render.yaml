@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: campusnotes
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:app
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.6
+      - key: LOCAL_DEV
+        value: "true"
+      - key: SECRET_KEY
+        generateValue: true

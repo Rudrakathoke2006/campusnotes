@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon-badge">🚀</div>
+      <h2 class="auth-title">Create Account</h2>
+      <p class="auth-subtitle">Join your student network to collaborate and exchange notes</p>
+    </div>
+
+    <form class="auth-form" method='post'>
+      <div class="form-group">
+        <label class="form-label" for="signup-email">Student Email Address</label>
+        <input id="signup-email" class="input-field" name='email' type='email' placeholder='student@campus.edu' required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signup-password">Create Password</label>
+        <input id="signup-password" class="input-field" name='password' type='password' placeholder='••••••••' required autocomplete="new-password">
+      </div>
+
+      <div class="password-requirements">
+        <span class="req-title">Password guidelines:</span>
+        <span class="req-desc">8+ characters with uppercase, lowercase, numbers, and symbols.</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        <span>Create Account</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already registered? <a href='/login' class="auth-switch-link">Log in</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

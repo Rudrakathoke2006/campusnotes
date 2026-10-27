@@ -1,0 +1,1 @@
+{"Rules":[{"ID":"cost","Status":"Enabled","Filter":{"Prefix":"notes/"},"Transitions":[{"Days":30,"StorageClass":"STANDARD_IA"}],"NoncurrentVersionExpiration":{"NoncurrentDays":30}}]}
